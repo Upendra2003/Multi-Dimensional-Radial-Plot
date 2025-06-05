@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>5D Radial Wheel Plot</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  </head>
+  <body>
+    <h2 style="text-align: center">5D Data Visualized as Radial Wheel in 3D</h2>
+    <div id="plot" style="width: 100vw; height: 90vh"></div>
+
+    <script>
+      fetch("/api/points")
+        .then((response) => response.json())
+        .then((data) => {
+          const traces = [];
+
+          // Draw data lines from center to each feature point
+          data.lines.forEach((line) => {
+            const x = [line[0][0], line[1][0]];
+            const y = [line[0][1], line[1][1]];
+            const z = [line[0][2], line[1][2]];
+
+            traces.push({
+              type: "scatter3d",
+              mode: "lines+markers",
+              x,
+              y,
+              z,
+              line: { width: 2 },
+              marker: { size: 3 },
+              name: "Data Line",
+              opacity: 0.6,
+            });
+          });
+
+          // ===== Draw the Radial Wheel Base =====
+          const n = data.labels.length;
+          const radius = 1; // max value assumed for normalized data
+          const angles = [...Array(n).keys()].map((i) => (2 * Math.PI * i) / n);
+
+          // Spokes from center to edge
+          angles.forEach((angle, i) => {
+            const x = [0, radius * Math.cos(angle)];
+            const y = [0, 0]; // wheel lies in Y=0 plane
+            const z = [0, radius * Math.sin(angle)];
+
+            traces.push({
+              type: "scatter3d",
+              mode: "lines+text",
+              x,
+              y,
+              z,
+              line: { width: 3, color: "gray" },
+              text: ["", data.labels[i]],
+              textposition: "top right",
+              name: data.labels[i],
+              showlegend: false,
+            });
+          });
+
+          // Circle connecting all feature ends (visual ring)
+          const circle_x = angles
+            .map((a) => radius * Math.cos(a))
+            .concat(radius * Math.cos(angles[0]));
+          const circle_y = angles.map((a) => 0).concat(0);
+          const circle_z = angles
+            .map((a) => radius * Math.sin(a))
+            .concat(radius * Math.sin(angles[0]));
+
+          traces.push({
+            type: "scatter3d",
+            mode: "lines",
+            x: circle_x,
+            y: circle_y,
+            z: circle_z,
+            line: { color: "black", width: 2, dash: "dot" },
+            name: "Wheel Base",
+            showlegend: false,
+          });
+
+          const layout = {
+            scene: {
+              xaxis: { title: "Radial X", range: [-1.2, 1.2] },
+              yaxis: { title: "Output (Y)", range: [-0.2, 1.2] },
+              zaxis: { title: "Radial Z", range: [-1.2, 1.2] },
+            },
+            margin: { l: 0, r: 0, b: 0, t: 40 },
+            title: "5D Radial Wheel with Output Y",
+          };
+
+          Plotly.newPlot("plot", traces, layout);
+        });
+    </script>
+  </body>
+</html>
