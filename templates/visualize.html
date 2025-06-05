@@ -3,22 +3,435 @@
   <head>
     <title>5D Radial Wheel Plot</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+      }
+
+      .container {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h2 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+        margin: 0;
+      }
+
+      .controls {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .control-group {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 15px 20px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .control-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+      select,
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        font-weight: bold;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      button {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        min-width: 120px;
+      }
+
+      button:hover {
+        background: linear-gradient(45deg, #764ba2, #667eea);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      select:hover {
+        background: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      #plot {
+        width: 100%;
+        height: 80vh;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+      }
+
+      .info-panel {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .info-card {
+        background: rgba(255, 255, 255, 0.15);
+        padding: 25px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      .info-card h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        color: #fff;
+      }
+
+      .info-card p,
+      .info-card li {
+        opacity: 0.9;
+        line-height: 1.6;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-top: 15px;
+      }
+
+      .stat-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .stat-value {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #4ecdc4;
+      }
+
+      .stat-label {
+        font-size: 0.9em;
+        opacity: 0.8;
+        margin-top: 5px;
+      }
+
+      .legend-items {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-size: 0.9em;
+      }
+
+      .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+        animation: pulse 2s infinite;
+      }
+
+      .status-rotating {
+        background: #4ecdc4;
+      }
+
+      .status-paused {
+        background: #ff6b6b;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .loading {
+        text-align: center;
+        padding: 50px;
+        font-size: 1.2em;
+        opacity: 0.7;
+      }
+    </style>
   </head>
   <body>
-    <h2 style="text-align: center">5D Data Visualized as Radial Wheel in 3D</h2>
-    <div id="plot" style="width: 100vw; height: 90vh"></div>
+    <div class="container">
+      <div class="header">
+        <h2>5D Data Visualized as Radial Wheel in 3D</h2>
+        <p>
+          Interactive visualization of high-dimensional data using radial
+          projection
+        </p>
+      </div>
+
+      <div class="controls">
+        <div class="control-group">
+          <label for="colorMode">Color Mode:</label>
+          <select id="colorMode">
+            <option value="tier">By Price Tier</option>
+            <option value="gradient">Gradient Scale</option>
+            <option value="feature">By Feature</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <label for="viewMode">View Mode:</label>
+          <select id="viewMode">
+            <option value="standard">Standard</option>
+            <option value="top">Top View</option>
+            <option value="side">Side View</option>
+          </select>
+        </div>
+        <div class="control-group">
+          <button id="rotateBtn">⏸️ Pause Rotation</button>
+        </div>
+        <div class="control-group">
+          <button id="resetBtn">🔄 Reset View</button>
+        </div>
+        <div class="control-group">
+          <button id="fullscreenBtn">🔍 Fullscreen</button>
+        </div>
+      </div>
+
+      <div id="plot">
+        <div class="loading">Loading visualization...</div>
+      </div>
+
+      <div class="info-panel">
+        <div class="info-card">
+          <h3>🎯 Visualization Status</h3>
+          <p>
+            <span
+              class="status-indicator status-rotating"
+              id="rotationStatus"
+            ></span>
+            <span id="rotationText">Auto-rotating (pauses on hover)</span>
+          </p>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="pointCount">0</div>
+              <div class="stat-label">Data Points</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="featureCount">0</div>
+              <div class="stat-label">Features</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3>🎨 Color Legend</h3>
+          <p>Data points are colored by price tier:</p>
+          <div class="legend-items">
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #28a745"></div>
+              <span>Low (< 40%)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #fd7e14"></div>
+              <span>Mid (40-70%)</span>
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background: #dc3545"></div>
+              <span>High (> 70%)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3>🎮 Interactions</h3>
+          <ul style="list-style: none; padding: 0">
+            <li>
+              🖱️ <strong>Rotate:</strong> Click and drag to rotate the view
+            </li>
+            <li>🔍 <strong>Zoom:</strong> Scroll to zoom in/out</li>
+            <li>
+              📊 <strong>Hover:</strong> See detailed values for each point
+            </li>
+            <li>
+              ⏸️ <strong>Auto-pause:</strong> Rotation pauses when hovering
+            </li>
+            <li>
+              🎛️ <strong>Controls:</strong> Use buttons to change view modes
+            </li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>📊 How It Works</h3>
+          <p>
+            Each feature is assigned a direction (spoke) in a circular plane.
+            Data points are projected onto these spokes based on normalized
+            values, with the output forming the height (Y-axis).
+          </p>
+          <p>
+            <strong>Formula:</strong> x = Σ(feature × cos(angle)), z = Σ(feature
+            × sin(angle)), y = output
+          </p>
+        </div>
+      </div>
+    </div>
 
     <script>
-      fetch("/api/points")
-        .then((response) => response.json())
-        .then((data) => {
+      class EnhancedRadialWheel {
+        constructor() {
+          this.rotating = true;
+          this.angle = 0;
+          this.animationFrame = null;
+          this.plotData = null;
+          this.currentColorMode = "tier";
+          this.init();
+        }
+
+        init() {
+          this.setupEventListeners();
+          this.loadData();
+        }
+
+        setupEventListeners() {
+          document.getElementById("rotateBtn").addEventListener("click", () => {
+            this.toggleRotation();
+          });
+
+          document.getElementById("resetBtn").addEventListener("click", () => {
+            this.resetView();
+          });
+
+          document
+            .getElementById("fullscreenBtn")
+            .addEventListener("click", () => {
+              this.toggleFullscreen();
+            });
+
+          document
+            .getElementById("colorMode")
+            .addEventListener("change", (e) => {
+              this.currentColorMode = e.target.value;
+              this.updateVisualization();
+            });
+
+          document
+            .getElementById("viewMode")
+            .addEventListener("change", (e) => {
+              this.changeViewMode(e.target.value);
+            });
+        }
+
+        loadData() {
+          fetch("/api/points")
+            .then((response) => response.json())
+            .then((data) => {
+              this.plotData = data;
+              this.createVisualization(data);
+              this.updateStats(data);
+            })
+            .catch((error) => {
+              console.error("Error loading data:", error);
+              document.getElementById("plot").innerHTML =
+                '<div class="loading">Error loading data. Please check your API endpoint.</div>';
+            });
+        }
+
+        createVisualization(data) {
           const traces = [];
 
-          // Draw data lines from center to each feature point
-          data.lines.forEach((line) => {
+          // Enhanced color mapping
+          const colorMaps = {
+            tier: {
+              low: "#28a745",
+              mid: "#fd7e14",
+              high: "#dc3545",
+            },
+            gradient: {
+              low: "#4ecdc4",
+              mid: "#45b7d1",
+              high: "#6c5ce7",
+            },
+            feature: {
+              low: "#a29bfe",
+              mid: "#fd79a8",
+              high: "#fdcb6e",
+            },
+          };
+
+          const currentColors = colorMaps[this.currentColorMode];
+
+          const getCluster = (y) => {
+            if (y < 0.4) return "low";
+            else if (y < 0.7) return "mid";
+            else return "high";
+          };
+
+          // Enhanced data lines with improved tooltips
+          data.lines.forEach((line, index) => {
             const x = [line[0][0], line[1][0]];
             const y = [line[0][1], line[1][1]];
             const z = [line[0][2], line[1][2]];
+            const tier = getCluster(line[1][1]);
 
             traces.push({
               type: "scatter3d",
@@ -26,22 +439,39 @@
               x,
               y,
               z,
-              line: { width: 2 },
-              marker: { size: 3 },
-              name: "Data Line",
-              opacity: 0.6,
+              line: {
+                width: 3,
+                color: currentColors[tier],
+              },
+              marker: {
+                size: 4,
+                color: currentColors[tier],
+                opacity: 0.8,
+              },
+              name: `${tier.toUpperCase()} (${(line[1][1] * 100).toFixed(0)}%)`,
+              text: [
+                `Origin`,
+                `Output: ${(line[1][1] * 100).toFixed(
+                  1
+                )}%<br>Tier: ${tier.toUpperCase()}<br>Coordinates: (${line[1][0].toFixed(
+                  2
+                )}, ${line[1][1].toFixed(2)}, ${line[1][2].toFixed(2)})`,
+              ],
+              hoverinfo: "text",
+              opacity: 0.8,
+              showlegend: index < 3,
+              legendgroup: tier,
             });
           });
 
-          // ===== Draw the Radial Wheel Base =====
+          // Enhanced feature spokes
           const n = data.labels.length;
-          const radius = 1; // max value assumed for normalized data
+          const radius = 1;
           const angles = [...Array(n).keys()].map((i) => (2 * Math.PI * i) / n);
 
-          // Spokes from center to edge
           angles.forEach((angle, i) => {
             const x = [0, radius * Math.cos(angle)];
-            const y = [0, 0]; // wheel lies in Y=0 plane
+            const y = [0, 0];
             const z = [0, radius * Math.sin(angle)];
 
             traces.push({
@@ -50,19 +480,37 @@
               x,
               y,
               z,
-              line: { width: 3, color: "gray" },
+              line: {
+                width: 5,
+                color: "rgba(255,255,255,0.8)",
+                dash: "dash",
+              },
               text: ["", data.labels[i]],
               textposition: "top right",
+              textfont: {
+                size: 14,
+                color: "white",
+                family: "Arial Black",
+              },
               name: data.labels[i],
               showlegend: false,
+              visible: true,
+              hoverinfo: "text",
+              hovertext: [
+                ``,
+                `Feature: ${data.labels[i]}<br>Angle: ${(
+                  (angle * 180) /
+                  Math.PI
+                ).toFixed(1)}°`,
+              ],
             });
           });
 
-          // Circle connecting all feature ends (visual ring)
+          // Enhanced base circle
           const circle_x = angles
             .map((a) => radius * Math.cos(a))
             .concat(radius * Math.cos(angles[0]));
-          const circle_y = angles.map((a) => 0).concat(0);
+          const circle_y = angles.map(() => 0).concat(0);
           const circle_z = angles
             .map((a) => radius * Math.sin(a))
             .concat(radius * Math.sin(angles[0]));
@@ -73,23 +521,174 @@
             x: circle_x,
             y: circle_y,
             z: circle_z,
-            line: { color: "black", width: 2, dash: "dot" },
+            line: {
+              color: "rgba(255,255,255,0.6)",
+              width: 3,
+              dash: "dot",
+            },
             name: "Wheel Base",
             showlegend: false,
+            hoverinfo: "skip",
           });
 
+          // Enhanced layout
           const layout = {
             scene: {
-              xaxis: { title: "Radial X", range: [-1.2, 1.2] },
-              yaxis: { title: "Output (Y)", range: [-0.2, 1.2] },
-              zaxis: { title: "Radial Z", range: [-1.2, 1.2] },
+              xaxis: {
+                title: { text: "Radial X", font: { color: "white", size: 14 } },
+                range: [-1.3, 1.3],
+                showgrid: true,
+                gridcolor: "rgba(255,255,255,0.2)",
+                showbackground: false,
+                tickfont: { color: "white" },
+              },
+              yaxis: {
+                title: {
+                  text: "Output (Y)",
+                  font: { color: "white", size: 14 },
+                },
+                range: [-0.2, 1.2],
+                showgrid: true,
+                gridcolor: "rgba(255,255,255,0.2)",
+                showbackground: false,
+                tickfont: { color: "white" },
+              },
+              zaxis: {
+                title: { text: "Radial Z", font: { color: "white", size: 14 } },
+                range: [-1.3, 1.3],
+                showgrid: true,
+                gridcolor: "rgba(255,255,255,0.2)",
+                showbackground: false,
+                tickfont: { color: "white" },
+              },
+              camera: {
+                eye: { x: 1.6, y: 1, z: 1.6 },
+              },
+              bgcolor: "rgba(0,0,0,0)",
             },
-            margin: { l: 0, r: 0, b: 0, t: 40 },
-            title: "5D Radial Wheel with Output Y",
+            margin: { l: 0, r: 0, b: 0, t: 0 },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            showlegend: true,
+            legend: {
+              font: { color: "white", size: 12 },
+              bgcolor: "rgba(255,255,255,0.1)",
+              bordercolor: "rgba(255,255,255,0.3)",
+              borderwidth: 1,
+            },
           };
 
-          Plotly.newPlot("plot", traces, layout);
-        });
+          Plotly.newPlot("plot", traces, layout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: ["pan2d", "lasso2d"],
+            displaylogo: false,
+          }).then(() => {
+            this.setupPlotInteractions();
+            this.startRotation();
+          });
+        }
+
+        setupPlotInteractions() {
+          const plotElement = document.getElementById("plot");
+
+          plotElement.onmouseenter = () => {
+            if (this.rotating) {
+              this.updateRotationStatus(false);
+            }
+          };
+
+          plotElement.onmouseleave = () => {
+            if (!this.rotating) {
+              this.updateRotationStatus(true);
+            }
+          };
+        }
+
+        startRotation() {
+          const animate = () => {
+            if (this.rotating) {
+              this.angle += 0.005;
+              Plotly.relayout("plot", {
+                "scene.camera.eye": {
+                  x: 1.6 * Math.cos(this.angle),
+                  y: 1,
+                  z: 1.6 * Math.sin(this.angle),
+                },
+              });
+            }
+            this.animationFrame = requestAnimationFrame(animate);
+          };
+          animate();
+        }
+
+        toggleRotation() {
+          this.rotating = !this.rotating;
+          this.updateRotationStatus(this.rotating);
+        }
+
+        updateRotationStatus(isRotating) {
+          this.rotating = isRotating;
+          const statusIndicator = document.getElementById("rotationStatus");
+          const statusText = document.getElementById("rotationText");
+          const rotateBtn = document.getElementById("rotateBtn");
+
+          if (isRotating) {
+            statusIndicator.className = "status-indicator status-rotating";
+            statusText.textContent = "Auto-rotating (pauses on hover)";
+            rotateBtn.innerHTML = "⏸️ Pause Rotation";
+          } else {
+            statusIndicator.className = "status-indicator status-paused";
+            statusText.textContent = "Rotation paused";
+            rotateBtn.innerHTML = "▶️ Start Rotation";
+          }
+        }
+
+        resetView() {
+          this.angle = 0;
+          Plotly.relayout("plot", {
+            "scene.camera.eye": { x: 1.6, y: 1, z: 1.6 },
+          });
+        }
+
+        changeViewMode(mode) {
+          const cameras = {
+            standard: { x: 1.6, y: 1, z: 1.6 },
+            top: { x: 0, y: 2.5, z: 0 },
+            side: { x: 2.5, y: 0, z: 0 },
+          };
+
+          Plotly.relayout("plot", {
+            "scene.camera.eye": cameras[mode],
+          });
+        }
+
+        toggleFullscreen() {
+          const plotElement = document.getElementById("plot");
+          if (!document.fullscreenElement) {
+            plotElement.requestFullscreen();
+          } else {
+            document.exitFullscreen();
+          }
+        }
+
+        updateVisualization() {
+          if (this.plotData) {
+            this.createVisualization(this.plotData);
+          }
+        }
+
+        updateStats(data) {
+          document.getElementById("pointCount").textContent = data.lines.length;
+          document.getElementById("featureCount").textContent =
+            data.labels.length;
+        }
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        new EnhancedRadialWheel();
+      });
     </script>
   </body>
 </html>
