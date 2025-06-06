@@ -8,7 +8,7 @@
   <body>
     <div class="container">
       <div class="header">
-        <h2>5D Data Visualized as Radial Wheel in 3D</h2>
+        <h2 id="plotTitle">5D Data Visualized as Radial Wheel in 3D</h2>
         <p>
           Interactive visualization of high-dimensional data using radial
           projection
@@ -17,9 +17,15 @@
 
       <div class="controls">
         <div class="control-group">
+          <label for="datasetSelect">Dataset:</label>
+          <select id="datasetSelect">
+            <option value="">Select a dataset</option>
+          </select>
+        </div>
+        <div class="control-group">
           <label for="colorMode">Color Mode:</label>
           <select id="colorMode">
-            <option value="tier">By Price Tier</option>
+            <option value="tier">By Output Tier</option>
             <option value="gradient">Gradient Scale</option>
             <option value="feature">By Feature</option>
           </select>
@@ -36,6 +42,9 @@
           <button id="rotateBtn">⏸️ Pause Rotation</button>
         </div>
         <div class="control-group">
+          <button id="rotationModeBtn">🔄 Switch to Radial Rotation</button>
+        </div>
+        <div class="control-group">
           <button id="resetBtn">🔄 Reset View</button>
         </div>
         <div class="control-group">
@@ -49,13 +58,36 @@
 
       <div class="info-panel">
         <div class="info-card">
+          <h3>📊 Dataset Summary</h3>
+          <p>
+            <strong>Dataset:</strong> <span id="datasetName">Loading...</span>
+          </p>
+          <p>
+            <strong>Number of Data Points:</strong>
+            <span id="edaPointCount">0</span>
+          </p>
+          <p>
+            <strong>Features Used:</strong> <span id="edaFeatureCount">0</span>
+          </p>
+          <p>
+            <strong>Output Feature:</strong>
+            <span id="edaOutputFeature">N/A</span>
+          </p>
+          <button id="viewEdaBtn" style="margin-top: 10px">
+            View Detailed EDA
+          </button>
+        </div>
+
+        <div class="info-card">
           <h3>🎯 Visualization Status</h3>
           <p>
             <span
               class="status-indicator status-rotating"
               id="rotationStatus"
             ></span>
-            <span id="rotationText">Auto-rotating (pauses on hover)</span>
+            <span id="rotationText"
+              >Auto-rotating camera (pauses on hover)</span
+            >
           </p>
           <div class="stats-grid">
             <div class="stat-item">
@@ -71,7 +103,7 @@
 
         <div class="info-card">
           <h3>🎨 Color Legend</h3>
-          <p>Data points are colored by price tier:</p>
+          <p>Data points are colored by output tier:</p>
           <div class="legend-items">
             <div class="legend-item">
               <div class="legend-dot" style="background: #28a745"></div>
@@ -104,6 +136,10 @@
             <li>
               🎛️ <strong>Controls:</strong> Use buttons to change view modes
             </li>
+            <li>
+              🔄 <strong>Rotation Modes:</strong> Switch between camera and
+              radial rotation
+            </li>
           </ul>
         </div>
 
@@ -118,6 +154,11 @@
             <strong>Formula:</strong> x = Σ(feature × cos(angle)), z = Σ(feature
             × sin(angle)), y = output
           </p>
+          <p>
+            <strong>Rotation Modes:</strong> Camera rotation moves your
+            viewpoint, while radial rotation spins the entire wheel for 360°
+            analysis.
+          </p>
         </div>
       </div>
     </div>
@@ -127,21 +168,31 @@
         constructor() {
           this.rotating = true;
           this.angle = 0;
+          this.radialAngle = 0; // New: for radial axis rotation
+          this.rotationMode = "camera"; // New: 'camera' or 'radial'
           this.animationFrame = null;
           this.plotData = null;
           this.currentColorMode = "tier";
+          this.currentDataset = "house_price"; // Default dataset
+          this.datasets = [];
           this.init();
         }
 
         init() {
           this.setupEventListeners();
-          this.loadData();
+          this.loadDatasets();
         }
 
         setupEventListeners() {
           document.getElementById("rotateBtn").addEventListener("click", () => {
             this.toggleRotation();
           });
+
+          document
+            .getElementById("rotationModeBtn")
+            .addEventListener("click", () => {
+              this.toggleRotationMode();
+            });
 
           document.getElementById("resetBtn").addEventListener("click", () => {
             this.resetView();
@@ -165,15 +216,88 @@
             .addEventListener("change", (e) => {
               this.changeViewMode(e.target.value);
             });
+
+          document
+            .getElementById("datasetSelect")
+            .addEventListener("change", (e) => {
+              this.currentDataset = e.target.value;
+              if (this.currentDataset) {
+                this.loadData();
+                this.loadEda();
+              }
+            });
+
+          document
+            .getElementById("viewEdaBtn")
+            .addEventListener("click", () => {
+              window.location.href = `/eda?dataset=${this.currentDataset}`;
+            });
+        }
+
+        toggleRotationMode() {
+          this.rotationMode =
+            this.rotationMode === "camera" ? "radial" : "camera";
+          const rotationModeBtn = document.getElementById("rotationModeBtn");
+          rotationModeBtn.innerHTML =
+            this.rotationMode === "camera"
+              ? "🔄 Switch to Radial Rotation"
+              : "📷 Switch to Camera Rotation";
+
+          // Reset angles when switching modes
+          this.angle = 0;
+          this.radialAngle = 0;
+
+          // Update status text
+          this.updateRotationStatus(this.rotating);
+
+          // If we're switching to camera mode, reset the view and recreate visualization
+          if (this.rotationMode === "camera") {
+            this.resetView();
+            if (this.plotData) {
+              this.createVisualization(this.plotData);
+            }
+          }
+        }
+
+        loadDatasets() {
+          fetch("/api/datasets")
+            .then((response) => response.json())
+            .then((data) => {
+              this.datasets = data.datasets;
+              const datasetSelect = document.getElementById("datasetSelect");
+              datasetSelect.innerHTML =
+                '<option value="">Select a dataset</option>';
+              this.datasets.forEach((dataset) => {
+                const option = document.createElement("option");
+                option.value = dataset;
+                option.textContent = dataset.replace("_", " ").toUpperCase();
+                datasetSelect.appendChild(option);
+              });
+              datasetSelect.value = this.currentDataset;
+              this.loadData();
+              this.loadEda();
+            })
+            .catch((error) => {
+              console.error("Error loading datasets:", error);
+              document.getElementById("plot").innerHTML =
+                '<div class="loading">Error loading datasets. Please check your API endpoint.</div>';
+            });
         }
 
         loadData() {
-          fetch("/api/points")
+          document.getElementById("plot").innerHTML =
+            '<div class="loading">Loading visualization...</div>';
+          fetch(`/api/points?dataset=${this.currentDataset}`)
             .then((response) => response.json())
             .then((data) => {
               this.plotData = data;
               this.createVisualization(data);
               this.updateStats(data);
+              document.getElementById(
+                "plotTitle"
+              ).textContent = `5D Data Visualized as Radial Wheel in 3D - ${this.currentDataset
+                .replace("_", " ")
+                .toUpperCase()}`;
             })
             .catch((error) => {
               console.error("Error loading data:", error);
@@ -182,28 +306,33 @@
             });
         }
 
+        loadEda() {
+          fetch(`/api/eda?dataset=${this.currentDataset}`)
+            .then((response) => response.json())
+            .then((data) => {
+              document.getElementById("datasetName").textContent = data.dataset
+                .replace("_", " ")
+                .toUpperCase();
+              document.getElementById("edaPointCount").textContent =
+                data.num_data_points;
+              document.getElementById("edaFeatureCount").textContent =
+                Object.keys(data.features).length - 1; // Exclude output feature
+              document.getElementById("edaOutputFeature").textContent =
+                data.output_feature || "N/A";
+            })
+            .catch((error) => {
+              console.error("Error loading EDA:", error);
+              document.getElementById("datasetName").textContent = "Error";
+            });
+        }
+
         createVisualization(data) {
           const traces = [];
-
-          // Enhanced color mapping
           const colorMaps = {
-            tier: {
-              low: "#28a745",
-              mid: "#fd7e14",
-              high: "#dc3545",
-            },
-            gradient: {
-              low: "#4ecdc4",
-              mid: "#45b7d1",
-              high: "#6c5ce7",
-            },
-            feature: {
-              low: "#a29bfe",
-              mid: "#fd79a8",
-              high: "#fdcb6e",
-            },
+            tier: { low: "#28a745", mid: "#fd7e14", high: "#dc3545" },
+            gradient: { low: "#4ecdc4", mid: "#45b7d1", high: "#6c5ce7" },
+            feature: { low: "#a29bfe", mid: "#fd79a8", high: "#fdcb6e" },
           };
-
           const currentColors = colorMaps[this.currentColorMode];
 
           const getCluster = (y) => {
@@ -212,28 +341,19 @@
             else return "high";
           };
 
-          // Enhanced data lines with improved tooltips
           data.lines.forEach((line, index) => {
             const x = [line[0][0], line[1][0]];
             const y = [line[0][1], line[1][1]];
             const z = [line[0][2], line[1][2]];
             const tier = getCluster(line[1][1]);
-
             traces.push({
               type: "scatter3d",
               mode: "lines+markers",
               x,
               y,
               z,
-              line: {
-                width: 3,
-                color: currentColors[tier],
-              },
-              marker: {
-                size: 4,
-                color: currentColors[tier],
-                opacity: 0.8,
-              },
+              line: { width: 3, color: currentColors[tier] },
+              marker: { size: 4, color: currentColors[tier], opacity: 0.8 },
               name: `${tier.toUpperCase()} (${(line[1][1] * 100).toFixed(0)}%)`,
               text: [
                 `Origin`,
@@ -250,7 +370,6 @@
             });
           });
 
-          // Enhanced feature spokes
           const n = data.labels.length;
           const radius = 1;
           const angles = [...Array(n).keys()].map((i) => (2 * Math.PI * i) / n);
@@ -259,31 +378,21 @@
             const x = [0, radius * Math.cos(angle)];
             const y = [0, 0];
             const z = [0, radius * Math.sin(angle)];
-
             traces.push({
               type: "scatter3d",
               mode: "lines+text",
               x,
               y,
               z,
-              line: {
-                width: 5,
-                color: "rgba(255,255,255,0.8)",
-                dash: "dash",
-              },
+              line: { width: 5, color: "rgba(255,255,255,0.8)", dash: "dash" },
               text: ["", data.labels[i]],
               textposition: "top right",
-              textfont: {
-                size: 14,
-                color: "white",
-                family: "Arial Black",
-              },
+              textfont: { size: 14, color: "white", family: "Arial Black" },
               name: data.labels[i],
               showlegend: false,
               visible: true,
               hoverinfo: "text",
               hovertext: [
-                ``,
                 `Feature: ${data.labels[i]}<br>Angle: ${(
                   (angle * 180) /
                   Math.PI
@@ -292,7 +401,6 @@
             });
           });
 
-          // Enhanced base circle
           const circle_x = angles
             .map((a) => radius * Math.cos(a))
             .concat(radius * Math.cos(angles[0]));
@@ -300,24 +408,18 @@
           const circle_z = angles
             .map((a) => radius * Math.sin(a))
             .concat(radius * Math.sin(angles[0]));
-
           traces.push({
             type: "scatter3d",
             mode: "lines",
             x: circle_x,
             y: circle_y,
             z: circle_z,
-            line: {
-              color: "rgba(255,255,255,0.6)",
-              width: 3,
-              dash: "dot",
-            },
+            line: { color: "rgba(255,255,255,0.6)", width: 3, dash: "dot" },
             name: "Wheel Base",
             showlegend: false,
             hoverinfo: "skip",
           });
 
-          // Enhanced layout
           const layout = {
             scene: {
               xaxis: {
@@ -330,7 +432,7 @@
               },
               yaxis: {
                 title: {
-                  text: "Output (Y)",
+                  text: `Output (${data.output_label})`,
                   font: { color: "white", size: 14 },
                 },
                 range: [-0.2, 1.2],
@@ -347,9 +449,7 @@
                 showbackground: false,
                 tickfont: { color: "white" },
               },
-              camera: {
-                eye: { x: 1.6, y: 1, z: 1.6 },
-              },
+              camera: { eye: { x: 1.6, y: 1, z: 1.6 } },
               bgcolor: "rgba(0,0,0,0)",
             },
             margin: { l: 0, r: 0, b: 0, t: 0 },
@@ -375,33 +475,183 @@
           });
         }
 
-        setupPlotInteractions() {
-          const plotElement = document.getElementById("plot");
+        rotateRadialData() {
+          if (!this.plotData) return;
 
-          plotElement.onmouseenter = () => {
-            if (this.rotating) {
-              this.updateRotationStatus(false);
-            }
+          const traces = [];
+          const colorMaps = {
+            tier: { low: "#28a745", mid: "#fd7e14", high: "#dc3545" },
+            gradient: { low: "#4ecdc4", mid: "#45b7d1", high: "#6c5ce7" },
+            feature: { low: "#a29bfe", mid: "#fd79a8", high: "#fdcb6e" },
+          };
+          const currentColors = colorMaps[this.currentColorMode];
+
+          const getCluster = (y) => {
+            if (y < 0.4) return "low";
+            else if (y < 0.7) return "mid";
+            else return "high";
           };
 
+          // Rotate data lines around Y-axis
+          this.plotData.lines.forEach((line, index) => {
+            const rotatedLine = line.map((point) => [
+              point[0] * Math.cos(this.radialAngle) -
+                point[2] * Math.sin(this.radialAngle),
+              point[1], // Y stays the same (output axis)
+              point[0] * Math.sin(this.radialAngle) +
+                point[2] * Math.cos(this.radialAngle),
+            ]);
+
+            const x = [rotatedLine[0][0], rotatedLine[1][0]];
+            const y = [rotatedLine[0][1], rotatedLine[1][1]];
+            const z = [rotatedLine[0][2], rotatedLine[1][2]];
+            const tier = getCluster(line[1][1]);
+
+            traces.push({
+              type: "scatter3d",
+              mode: "lines+markers",
+              x,
+              y,
+              z,
+              line: { width: 3, color: currentColors[tier] },
+              marker: { size: 4, color: currentColors[tier], opacity: 0.8 },
+              name: `${tier.toUpperCase()} (${(line[1][1] * 100).toFixed(0)}%)`,
+              text: [
+                `Origin`,
+                `Output: ${(line[1][1] * 100).toFixed(
+                  1
+                )}%<br>Tier: ${tier.toUpperCase()}<br>Coordinates: (${rotatedLine[1][0].toFixed(
+                  2
+                )}, ${rotatedLine[1][1].toFixed(
+                  2
+                )}, ${rotatedLine[1][2].toFixed(2)})`,
+              ],
+              hoverinfo: "text",
+              opacity: 0.8,
+              showlegend: index < 3,
+              legendgroup: tier,
+            });
+          });
+
+          // Rotate feature spokes
+          const n = this.plotData.labels.length;
+          const radius = 1;
+          const angles = [...Array(n).keys()].map((i) => (2 * Math.PI * i) / n);
+
+          angles.forEach((angle, i) => {
+            const baseX = radius * Math.cos(angle);
+            const baseZ = radius * Math.sin(angle);
+
+            // Apply radial rotation
+            const rotatedX =
+              baseX * Math.cos(this.radialAngle) -
+              baseZ * Math.sin(this.radialAngle);
+            const rotatedZ =
+              baseX * Math.sin(this.radialAngle) +
+              baseZ * Math.cos(this.radialAngle);
+
+            const x = [0, rotatedX];
+            const y = [0, 0];
+            const z = [0, rotatedZ];
+
+            traces.push({
+              type: "scatter3d",
+              mode: "lines+text",
+              x,
+              y,
+              z,
+              line: { width: 5, color: "rgba(255,255,255,0.8)", dash: "dash" },
+              text: ["", this.plotData.labels[i]],
+              textposition: "top right",
+              textfont: { size: 14, color: "white", family: "Arial Black" },
+              name: this.plotData.labels[i],
+              showlegend: false,
+              visible: true,
+              hoverinfo: "text",
+              hovertext: [
+                `Feature: ${this.plotData.labels[i]}<br>Angle: ${(
+                  (angle * 180) /
+                  Math.PI
+                ).toFixed(1)}°`,
+              ],
+            });
+          });
+
+          // Rotate the circular base
+          const circle_x = angles
+            .map((a) => {
+              const baseX = radius * Math.cos(a);
+              const baseZ = radius * Math.sin(a);
+              return (
+                baseX * Math.cos(this.radialAngle) -
+                baseZ * Math.sin(this.radialAngle)
+              );
+            })
+            .concat(
+              radius * Math.cos(angles[0]) * Math.cos(this.radialAngle) -
+                radius * Math.sin(angles[0]) * Math.sin(this.radialAngle)
+            );
+
+          const circle_y = angles.map(() => 0).concat(0);
+
+          const circle_z = angles
+            .map((a) => {
+              const baseX = radius * Math.cos(a);
+              const baseZ = radius * Math.sin(a);
+              return (
+                baseX * Math.sin(this.radialAngle) +
+                baseZ * Math.cos(this.radialAngle)
+              );
+            })
+            .concat(
+              radius * Math.cos(angles[0]) * Math.sin(this.radialAngle) +
+                radius * Math.sin(angles[0]) * Math.cos(this.radialAngle)
+            );
+
+          traces.push({
+            type: "scatter3d",
+            mode: "lines",
+            x: circle_x,
+            y: circle_y,
+            z: circle_z,
+            line: { color: "rgba(255,255,255,0.6)", width: 3, dash: "dot" },
+            name: "Wheel Base",
+            showlegend: false,
+            hoverinfo: "skip",
+          });
+
+          // Update the plot with rotated data
+          Plotly.react("plot", traces);
+        }
+
+        setupPlotInteractions() {
+          const plotElement = document.getElementById("plot");
+          plotElement.onmouseenter = () => {
+            if (this.rotating) this.updateRotationStatus(false);
+          };
           plotElement.onmouseleave = () => {
-            if (!this.rotating) {
-              this.updateRotationStatus(true);
-            }
+            if (!this.rotating) this.updateRotationStatus(true);
           };
         }
 
         startRotation() {
           const animate = () => {
             if (this.rotating) {
-              this.angle += 0.005;
-              Plotly.relayout("plot", {
-                "scene.camera.eye": {
-                  x: 1.6 * Math.cos(this.angle),
-                  y: 1,
-                  z: 1.6 * Math.sin(this.angle),
-                },
-              });
+              if (this.rotationMode === "camera") {
+                // Original camera rotation
+                this.angle += 0.005;
+                Plotly.relayout("plot", {
+                  "scene.camera.eye": {
+                    x: 1.6 * Math.cos(this.angle),
+                    y: 1,
+                    z: 1.6 * Math.sin(this.angle),
+                  },
+                });
+              } else {
+                // New radial axis rotation
+                this.radialAngle += 0.008;
+                this.rotateRadialData();
+              }
             }
             this.animationFrame = requestAnimationFrame(animate);
           };
@@ -421,7 +671,9 @@
 
           if (isRotating) {
             statusIndicator.className = "status-indicator status-rotating";
-            statusText.textContent = "Auto-rotating (pauses on hover)";
+            const modeText =
+              this.rotationMode === "camera" ? "camera" : "radial axis";
+            statusText.textContent = `Auto-rotating ${modeText} (pauses on hover)`;
             rotateBtn.innerHTML = "⏸️ Pause Rotation";
           } else {
             statusIndicator.className = "status-indicator status-paused";
@@ -432,6 +684,7 @@
 
         resetView() {
           this.angle = 0;
+          this.radialAngle = 0;
           Plotly.relayout("plot", {
             "scene.camera.eye": { x: 1.6, y: 1, z: 1.6 },
           });
@@ -443,25 +696,17 @@
             top: { x: 0, y: 2.5, z: 0 },
             side: { x: 2.5, y: 0, z: 0 },
           };
-
-          Plotly.relayout("plot", {
-            "scene.camera.eye": cameras[mode],
-          });
+          Plotly.relayout("plot", { "scene.camera.eye": cameras[mode] });
         }
 
         toggleFullscreen() {
           const plotElement = document.getElementById("plot");
-          if (!document.fullscreenElement) {
-            plotElement.requestFullscreen();
-          } else {
-            document.exitFullscreen();
-          }
+          if (!document.fullscreenElement) plotElement.requestFullscreen();
+          else document.exitFullscreen();
         }
 
         updateVisualization() {
-          if (this.plotData) {
-            this.createVisualization(this.plotData);
-          }
+          if (this.plotData) this.createVisualization(this.plotData);
         }
 
         updateStats(data) {
@@ -471,7 +716,6 @@
         }
       }
 
-      // Initialize when DOM is loaded
       document.addEventListener("DOMContentLoaded", () => {
         new EnhancedRadialWheel();
       });

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Exploratory Data Analysis</title>
+    <link rel="stylesheet" href="static/style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      h1,
+      h2 {
+        color: #ffffff;
+      }
+      .feature-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background-color: #2a2a2a;
+      }
+      .feature-table th,
+      .feature-table td {
+        padding: 10px;
+        border: 1px solid #444;
+        text-align: left;
+      }
+      .feature-table th {
+        background-color: #3a3a3a;
+      }
+      .feature-table tr:nth-child(even) {
+        background-color: #333;
+      }
+      .back-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-bottom: 20px;
+      }
+      .back-btn:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back-btn">← Back to Visualization</a>
+      <h1 id="edaTitle">Exploratory Data Analysis</h1>
+      <h2>Dataset Overview</h2>
+      <p>
+        <strong>Number of Data Points:</strong>
+        <span id="edaPointCount">0</span>
+      </p>
+
+      <h2>Feature Statistics</h2>
+      <table class="feature-table" id="featureTable">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Type</th>
+            <th>Statistics</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h2>Insights from Radial Wheel Graph</h2>
+      <p id="graphInsights">Loading insights...</p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dataset = urlParams.get("dataset") || "house_price";
+        document.getElementById(
+          "edaTitle"
+        ).textContent = `Exploratory Data Analysis - ${dataset
+          .replace("_", " ")
+          .toUpperCase()}`;
+
+        fetch(`/api/eda?dataset=${dataset}`)
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("edaPointCount").textContent =
+              data.num_data_points;
+
+            const tbody = document
+              .getElementById("featureTable")
+              .querySelector("tbody");
+            tbody.innerHTML = "";
+            for (const [feature, stats] of Object.entries(data.features)) {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${feature}</td>
+                <td>${stats.type}</td>
+                <td>${
+                  stats.type === "numerical"
+                    ? `Mean: ${stats.mean.toFixed(
+                        2
+                      )}<br>Std: ${stats.std.toFixed(
+                        2
+                      )}<br>Min: ${stats.min.toFixed(
+                        2
+                      )}<br>Max: ${stats.max.toFixed(2)}<br>Missing: ${
+                        stats.missing
+                      }`
+                    : `Unique Values: ${stats.unique_values}<br>Most Common: ${stats.most_common}<br>Missing: ${stats.missing}`
+                }</td>
+              `;
+              tbody.appendChild(row);
+            }
+
+            document.getElementById("graphInsights").textContent =
+              data.graph_insights;
+          })
+          .catch((error) => {
+            console.error("Error loading EDA:", error);
+            document.getElementById("edaPointCount").textContent = "Error";
+            document.getElementById("graphInsights").textContent =
+              "Error loading insights.";
+          });
+      });
+    </script>
+  </body>
+</html>
