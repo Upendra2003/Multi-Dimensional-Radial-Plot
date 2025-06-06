@@ -175,6 +175,7 @@
           this.currentColorMode = "tier";
           this.currentDataset = "house_price"; // Default dataset
           this.datasets = [];
+          this.initialLayout = null;
           this.init();
         }
 
@@ -563,7 +564,7 @@
               line: { width: 5, color: "rgba(255,255,255,0.8)", dash: "dash" },
               text: ["", this.plotData.labels[i]],
               textposition: "top right",
-              textfont: { size: 14, color: "white", family: "Arial Black" },
+              textfont: { size: 14, color: "black", family: "Arial Black" },
               name: this.plotData.labels[i],
               showlegend: false,
               visible: true,
@@ -696,6 +697,9 @@
             top: { x: 0, y: 2.5, z: 0 },
             side: { x: 2.5, y: 0, z: 0 },
           };
+          // Pause rotation when changing view mode
+          this.rotating = false;
+          this.updateRotationStatus(false);
           Plotly.relayout("plot", { "scene.camera.eye": cameras[mode] });
         }
 
