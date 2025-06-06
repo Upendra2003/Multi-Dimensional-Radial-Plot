@@ -5,6 +5,22 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 
+@app.route('/house_price')
+def house_price_eda():
+    return render_template('house_price_eda.html')
+
+@app.route('/titanic_eda')
+def titanic_eda():
+    return render_template('titanic_eda.html')
+
+@app.route('/breast_cancer_eda')
+def breast_cancer_eda():
+    return render_template('breast_cancer_eda.html')
+
+@app.route('/food_delivery_times')
+def delivery_time_eda():
+    return render_template('delivery_time_eda.html')
+
 # Define dataset configurations
 DATASETS = {
     'house_price': {

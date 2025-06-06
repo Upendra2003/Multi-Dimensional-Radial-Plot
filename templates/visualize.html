@@ -228,10 +228,28 @@
               }
             });
 
+          // Define dataset mapping
+          const datasetRoutes = {
+            "house-price": "house_price_eda.html",
+            titanic: "titanic_eda.html",
+            "breast-cancer": "breast_cancer_eda.html",
+            "delivery-time": "delivery_time_eda.html",
+          };
+
+          // Updated button click handler
           document
             .getElementById("viewEdaBtn")
             .addEventListener("click", () => {
-              window.location.href = `/eda?dataset=${this.currentDataset}`;
+              const edaFile = datasetRoutes[this.currentDataset];
+              console.log("Current dataset:", this.currentDataset);
+              console.log("EDA file:", edaFile);
+              if (edaFile) {
+                window.location.href = edaFile;
+              } else {
+                console.error("Dataset not found:", this.currentDataset);
+                // Fallback to generic EDA page
+                window.location.href = `/${this.currentDataset}`;
+              }
             });
         }
 
