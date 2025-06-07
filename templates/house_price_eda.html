@@ -135,51 +135,47 @@
   <body>
     <div class="container">
       <div class="header">
-        <h1>Delivery Time Prediction - EDA Analysis</h1>
-        <p>
-          Comprehensive analysis of delivery performance across multiple
-          dimensions
-        </p>
+        <h1>House Prices Dataset - EDA Analysis</h1>
+        <p>Comprehensive analysis of house prices across multiple dimensions</p>
       </div>
 
       <!-- Section 1: Weather Clear Dimension Plot -->
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/1st_Dataset/AllFeatures.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+              src="{{ url_for('static', filename='plots/GIFS/1st_Dataset/AllFeatures.png') }}"
               alt="Weather Dimension Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">1. Weather Clear Dimension Plot</h2>
+          <h2 class="section-title">1. All Features Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              When the weather is clear, delivery times are generally low to
-              mid-range.
+              The plot displays six input features arranged in a radial layout,
+              each separated by 60 degrees.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows a concentration of data points in the green and
-              orange regions along the "Weather_Clear" axis, indicating that
-              deliveries are mostly on time or slightly delayed. The presence of
-              a few red points suggests there are rare cases of late deliveries,
-              but these are exceptions rather than the norm.
+              Features include floors, bedrooms, area (sqft), and city
+              indicators (Bangalore, Delhi, Chennai), with price as the output.
+              The radial structure helps compare multiple features
+              simultaneously across data points.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Clear weather seems to facilitate faster deliveries, likely due to
-              better visibility and road conditions, with only occasional delays
-              possibly due to other factors like distance or courier experience.
+              This comprehensive plot gives an overview of all contributing
+              factors to house pricing, making it useful for high-level feature
+              relationship analysis.
             </div>
           </div>
         </div>
@@ -189,44 +185,38 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/1st_Dataset/FloorBedAreaPlot.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+              src="{{ url_for('static', filename='plots/GIFS/1st_Dataset/FloorBedAreaPlot.png') }}"
               alt="All Features Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">2. All Features Plot</h2>
+          <h2 class="section-title">2. Area, Bedroom, and Floors Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The major area of the plot is green, with some orange and minimal
-              red areas.
+              This plot focuses on three structural features: area, number of
+              bedrooms, and floors.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dominance across dimensions (Preparation_Time_min,
-              Courier_Experience_yrs, Distance_km, and Weather conditions)
-              indicates that the average delivery time is low, regardless of the
-              feature combination. The orange areas (medium delivery time) are
-              decently represented, showing some variability, while the red
-              areas (late deliveries) are sparse, suggesting late deliveries are
-              uncommon.
+              A clear positive trend is visible—houses with more area, more
+              rooms, or more floors tend to be priced higher. The data points
+              shift upward as feature values increase.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              This plot highlights that, overall, the delivery system performs
-              well, with most deliveries being timely. The low incidence of red
-              (late deliveries) suggests that factors like distance, preparation
-              time, or courier experience generally don't lead to significant
-              delays, even when weather varies.
+              Structural features such as space and capacity are strong
+              indicators of pricing. Larger houses are predictably more
+              expensive.
             </div>
           </div>
         </div>
@@ -236,41 +226,38 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/1st_Dataset/CitiesPlot.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
+              src="{{ url_for('static', filename='plots/GIFS/1st_Dataset/CitiesPlot.png') }}"
               alt="Foggy and Rainy Features Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">3. Foggy and Rainy Features Plot</h2>
+          <h2 class="section-title">3. Cities Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              There are very few instances of late deliveries in foggy and rainy
-              conditions.
+              The plot compares house prices across three cities: Bangalore,
+              Chennai, and Delhi.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows limited red points along the "Weather_Rainy" and
-              "Weather_Foggy" axes, with more concentration in the green and
-              orange regions. This indicates that even in adverse weather
-              conditions, deliveries are mostly on time or only moderately
-              delayed.
+              Bangalore and Chennai have a high density of green points,
+              indicating the presence of many lower-priced houses. Delhi shows a
+              more balanced mix of low- and mid-priced homes.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Contrary to what might be expected, foggy and rainy weather
-              doesn't significantly impact delivery times in this dataset. This
-              could be due to experienced couriers, efficient preparation, or
-              shorter distances mitigating the effects of poor weather.
+              Contrary to popular belief, cities like Bangalore and Chennai
+              offer many affordable homes. Location alone doesn’t dictate high
+              prices; internal features and demand likely play larger roles.
             </div>
           </div>
         </div>
@@ -280,97 +267,44 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/1st_Dataset/DifferentView.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
+              src="{{ url_for('static', filename='plots/GIFS/1st_Dataset/DifferentView.png') }}"
               alt="Distance Dimension Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">4. Distance_km Dimension Plot</h2>
+          <h2 class="section-title">4. A Different View</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The Distance_km axis predominantly shows green dots, with some
-              orange and a few red dots scattered along the axis.
+              The plot shows a balanced presence of all three house price
+              tiers—low, mid, and high—represented by green, orange, and red
+              points respectively.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dots indicate that for most distances, the delivery time
-              is low, meaning deliveries are generally on time regardless of the
-              distance traveled. The orange dots represent medium delivery
-              times, suggesting that as distance increases, there are some cases
-              where delivery takes a bit longer but still remains within a
-              reasonable range. The sparse red dots show that late deliveries
-              are rare, even for longer distances.
+              All three colors are consistently visible across the graph,
+              indicating that houses with similar characteristics in terms of
+              floor count, bedroom number, and area are available in all pricing
+              categories. This suggests a wide distribution of affordability and
+              offerings within similar structural constraints.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Distance doesn't seem to be a major factor in causing delivery
-              delays in this dataset. This could imply that the logistics system
-              is well-optimized for handling varying distances, possibly due to
-              efficient routing, reliable transportation, or experienced
-              couriers who manage longer trips effectively. It's a positive sign
-              for delivering essential goods, as timely delivery is maintained
-              across distances.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Section 5: Courier Experience Plot -->
-      <div class="analysis-section">
-        <div class="gif-container">
-          <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
-            data-lightbox="weather-plot"
-          >
-            <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
-              alt="Courier Experience Dimension Plot"
-            />
-          </a>
-        </div>
-        <div class="content-container">
-          <h2 class="section-title">
-            5. Courier_Experience_yrs Dimension Plot
-          </h2>
-          <div class="insight-item">
-            <div class="insight-label">Observation:</div>
-            <div class="insight-text">
-              The Courier_Experience_yrs axis is also dominated by green dots,
-              with a moderate amount of orange dots and very few red dots.
-            </div>
-          </div>
-          <div class="insight-item">
-            <div class="insight-label">Analysis:</div>
-            <div class="insight-text">
-              The prevalence of green dots along this axis suggests that
-              couriers, regardless of their years of experience, are mostly able
-              to deliver on time. The orange dots indicate that in some cases,
-              delivery times are medium, which might occur with less experienced
-              couriers or in combination with other factors like weather or
-              distance. The minimal red dots show that late deliveries are
-              uncommon across all levels of courier experience.
-            </div>
-          </div>
-          <div class="insight-item">
-            <div class="insight-label">Interpretation:</div>
-            <div class="insight-text">
-              Courier experience doesn't significantly impact delivery times in
-              this dataset, as both new and experienced couriers achieve timely
-              deliveries. This could suggest that the training or operational
-              systems in place are effective, enabling even less experienced
-              couriers to perform well. It also highlights the robustness of the
-              delivery process, ensuring essential goods are delivered promptly
-              regardless of who is handling the delivery.
+              The even spread of price tiers implies that house pricing is
+              influenced by more than just structural features. Location,
+              demand, and additional factors like neighborhood, facilities, or
+              builder reputation likely play crucial roles in determining final
+              prices, making a diverse range of options accessible to buyers
+              with different budgets.
             </div>
           </div>
         </div>
@@ -379,29 +313,46 @@
       <!-- General Insights -->
       <div class="general-insights">
         <h2>General Insights from the Multivariate Radial Plots</h2>
+
         <div class="insight-item">
-          <div class="insight-label">Delivery Time Trends:</div>
+          <div class="insight-label">Structural Influence:</div>
           <div class="insight-text">
-            Across all plots, green (low delivery time) dominates, suggesting
-            the delivery system is efficient overall. Late deliveries (red) are
-            consistently rare, even under varying conditions.
+            Area (sqft), number of bedrooms, and number of floors show a strong
+            correlation with house price increases. Larger homes tend to fall
+            into higher price tiers, highlighting the impact of structural size
+            on pricing.
           </div>
         </div>
+
         <div class="insight-item">
-          <div class="insight-label">Weather Impact:</div>
+          <div class="insight-label">City-wise Distribution:</div>
           <div class="insight-text">
-            While clear weather results in the fastest deliveries, foggy and
-            rainy conditions don't lead to as many delays as might be expected,
-            indicating resilience in the delivery process.
+            Contrary to common assumptions, cities like Bangalore and Chennai
+            have a wide range of housing prices, including many low-priced
+            homes. Delhi exhibits a balanced mix of low and mid-tier housing,
+            indicating diverse urban affordability.
           </div>
         </div>
+
         <div class="insight-item">
-          <div class="insight-label">Feature Interactions:</div>
+          <div class="insight-label">Price Tier Diversity:</div>
           <div class="insight-text">
-            The "All Features" plot shows that no single factor (like distance
-            or preparation time) overwhelmingly causes delays, as the green area
-            spans across dimensions. Courier experience might play a role in
-            maintaining efficiency, especially in adverse weather.
+            The "Different View" plot reveals that all three price tiers—low,
+            mid, and high—are evenly distributed across houses with similar
+            structural features. This suggests that pricing is influenced not
+            just by size, but also by external factors like location, amenities,
+            and market trends.
+          </div>
+        </div>
+
+        <div class="insight-item">
+          <div class="insight-label">Feature Interdependence:</div>
+          <div class="insight-text">
+            The "All Features" plot reinforces that no single input feature
+            alone determines the house price. Instead, it's the interplay of
+            features—such as city and area together—that shapes pricing. This
+            multivariate nature highlights the complexity of real estate
+            markets.
           </div>
         </div>
       </div>
