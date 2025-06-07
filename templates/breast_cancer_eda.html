@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delivery Time Prediction - EDA Analysis</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .analysis-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .gif-container {
+        flex: 0 0 45%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .gif-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      }
+
+      .content-container {
+        flex: 1;
+        padding-left: 20px;
+      }
+
+      .section-title {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        color: #ffd700;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        padding-bottom: 10px;
+      }
+
+      .insight-item {
+        margin-bottom: 25px;
+      }
+
+      .insight-label {
+        font-weight: bold;
+        color: #87ceeb;
+        font-size: 1.1em;
+        margin-bottom: 8px;
+      }
+
+      .insight-text {
+        line-height: 1.6;
+        margin-bottom: 15px;
+        text-align: justify;
+      }
+
+      .general-insights {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 40px;
+        border-left: 5px solid #ffd700;
+      }
+
+      .general-insights h2 {
+        color: #ffd700;
+        margin-bottom: 20px;
+        font-size: 1.8em;
+      }
+
+      .general-insights .insight-item {
+        margin-bottom: 20px;
+      }
+
+      @media (max-width: 768px) {
+        .analysis-section {
+          flex-direction: column;
+        }
+
+        .gif-container {
+          flex: none;
+          width: 100%;
+        }
+
+        .content-container {
+          padding-left: 0;
+        }
+
+        body {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Breast Cancer - EDA Analysis</h1>
+        <p>
+          Comprehensive analysis of breast cancer data across multiple
+          dimensions
+        </p>
+      </div>
+
+      <!-- Section 1: Weather Clear Dimension Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+            data-lightbox="weather-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+              alt="Weather Dimension Plot"
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">1. Tumor Size vs. Age</h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              When the weather is clear, delivery times are generally low to
+              mid-range.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The plot shows a concentration of data points in the green and
+              orange regions along the "Weather_Clear" axis, indicating that
+              deliveries are mostly on time or slightly delayed. The presence of
+              a few red points suggests there are rare cases of late deliveries,
+              but these are exceptions rather than the norm.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              Clear weather seems to facilitate faster deliveries, likely due to
+              better visibility and road conditions, with only occasional delays
+              possibly due to other factors like distance or courier experience.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: All Features Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+            data-lightbox="weather-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+              alt="All Features Plot"
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">2. All Features Plot</h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              The major area of the plot is green, with some orange and minimal
+              red areas.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The green dominance across dimensions (Preparation_Time_min,
+              Courier_Experience_yrs, Distance_km, and Weather conditions)
+              indicates that the average delivery time is low, regardless of the
+              feature combination. The orange areas (medium delivery time) are
+              decently represented, showing some variability, while the red
+              areas (late deliveries) are sparse, suggesting late deliveries are
+              uncommon.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              This plot highlights that, overall, the delivery system performs
+              well, with most deliveries being timely. The low incidence of red
+              (late deliveries) suggests that factors like distance, preparation
+              time, or courier experience generally don't lead to significant
+              delays, even when weather varies.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Foggy and Rainy Features Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
+            data-lightbox="weather-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
+              alt="Foggy and Rainy Features Plot"
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">3. Foggy and Rainy Features Plot</h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              There are very few instances of late deliveries in foggy and rainy
+              conditions.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The plot shows limited red points along the "Weather_Rainy" and
+              "Weather_Foggy" axes, with more concentration in the green and
+              orange regions. This indicates that even in adverse weather
+              conditions, deliveries are mostly on time or only moderately
+              delayed.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              Contrary to what might be expected, foggy and rainy weather
+              doesn't significantly impact delivery times in this dataset. This
+              could be due to experienced couriers, efficient preparation, or
+              shorter distances mitigating the effects of poor weather.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Distance_km Dimension Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
+            data-lightbox="weather-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
+              alt="Distance Dimension Plot"
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">4. Distance_km Dimension Plot</h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              The Distance_km axis predominantly shows green dots, with some
+              orange and a few red dots scattered along the axis.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The green dots indicate that for most distances, the delivery time
+              is low, meaning deliveries are generally on time regardless of the
+              distance traveled. The orange dots represent medium delivery
+              times, suggesting that as distance increases, there are some cases
+              where delivery takes a bit longer but still remains within a
+              reasonable range. The sparse red dots show that late deliveries
+              are rare, even for longer distances.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              Distance doesn't seem to be a major factor in causing delivery
+              delays in this dataset. This could imply that the logistics system
+              is well-optimized for handling varying distances, possibly due to
+              efficient routing, reliable transportation, or experienced
+              couriers who manage longer trips effectively. It's a positive sign
+              for delivering essential goods, as timely delivery is maintained
+              across distances.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Courier Experience Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
+            data-lightbox="weather-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
+              alt="Courier Experience Dimension Plot"
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">
+            5. Courier_Experience_yrs Dimension Plot
+          </h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              The Courier_Experience_yrs axis is also dominated by green dots,
+              with a moderate amount of orange dots and very few red dots.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The prevalence of green dots along this axis suggests that
+              couriers, regardless of their years of experience, are mostly able
+              to deliver on time. The orange dots indicate that in some cases,
+              delivery times are medium, which might occur with less experienced
+              couriers or in combination with other factors like weather or
+              distance. The minimal red dots show that late deliveries are
+              uncommon across all levels of courier experience.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              Courier experience doesn't significantly impact delivery times in
+              this dataset, as both new and experienced couriers achieve timely
+              deliveries. This could suggest that the training or operational
+              systems in place are effective, enabling even less experienced
+              couriers to perform well. It also highlights the robustness of the
+              delivery process, ensuring essential goods are delivered promptly
+              regardless of who is handling the delivery.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- General Insights -->
+      <div class="general-insights">
+        <h2>General Insights from the Multivariate Radial Plots</h2>
+        <div class="insight-item">
+          <div class="insight-label">Delivery Time Trends:</div>
+          <div class="insight-text">
+            Across all plots, green (low delivery time) dominates, suggesting
+            the delivery system is efficient overall. Late deliveries (red) are
+            consistently rare, even under varying conditions.
+          </div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-label">Weather Impact:</div>
+          <div class="insight-text">
+            While clear weather results in the fastest deliveries, foggy and
+            rainy conditions don't lead to as many delays as might be expected,
+            indicating resilience in the delivery process.
+          </div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-label">Feature Interactions:</div>
+          <div class="insight-text">
+            The "All Features" plot shows that no single factor (like distance
+            or preparation time) overwhelmingly causes delays, as the green area
+            spans across dimensions. Courier experience might play a role in
+            maintaining efficiency, especially in adverse weather.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+</html>
