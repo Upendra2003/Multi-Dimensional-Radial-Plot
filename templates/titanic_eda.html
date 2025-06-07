@@ -142,44 +142,37 @@
         </p>
       </div>
 
-      <!-- Section 1: Weather Clear Dimension Plot -->
+      <!-- Section 1: titanic-plot -->
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-1.png') }}"
+            data-lightbox="titanic-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-              alt="Weather Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-1.png') }}"
+              alt="Titanic Feature Loadings Radar Chart"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">1. Weather Clear Dimension Plot</h2>
+          <h2 class="section-title">1. Titanic Feature Loadings Radar Chart</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              When the weather is clear, delivery times are generally low to
-              mid-range.
+              This is a 3D radar chart with axes labeled Radial X, Radial Y, and Radial Z, each scaled from -1 to 1. The attributes plotted are Titanic features: SibSp (strong positive on Radial Z, ~0.8), Age (moderate positive on Radial X, ~0.4), Pclass (strong positive on Radial Y, ~0.7), Sex_female (strong positive on Radial Y ~0.6, slight negative on Radial Z ~ -0.2), Fare (moderate positive on Radial X, ~0.5), and Parch (small positive on Radial Z, ~0.3). The viewing angle is fixed, providing a symmetrical perspective on all attributes.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows a concentration of data points in the green and
-              orange regions along the "Weather_Clear" axis, indicating that
-              deliveries are mostly on time or slightly delayed. The presence of
-              a few red points suggests there are rare cases of late deliveries,
-              but these are exceptions rather than the norm.
+              The fixed 3D viewing angle ensures equal visibility across attributes but introduces slight distortion due to the depth effect, making comparisons of magnitudes across axes challenging. The axes are plotted radially: Radial X (horizontal) highlights Age and Fare, Radial Y (diagonal bottom-left to top-right) emphasizes Pclass and Sex_female, and Radial Z (vertical) focuses on SibSp and Parch. Comparing attributes, Pclass and Sex_female show strong positive loadings on Radial Y, indicating a significant influence in that dimension, while SibSp dominates on Radial Z. Age and Fare have moderate contributions on Radial X, and Parch has a smaller influence on Radial Z. The overlap between Pclass and Sex_female on Radial Y suggests a correlation, while SibSp’s distinct position on Radial Z indicates a unique contribution.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Clear weather seems to facilitate faster deliveries, likely due to
-              better visibility and road conditions, with only occasional delays
-              possibly due to other factors like distance or courier experience.
+              Pclass and Sex_female are key predictors of survival, as their strong positive loadings on Radial Y suggest they explain significant variance in the survival outcome. SibSp’s prominence on Radial Z indicates it also plays a critical role, possibly reflecting family dynamics impacting survival chances. Age and Fare contribute moderately, suggesting they are less dominant but still relevant factors. The viewing angle and axis plotting reveal that Sex_female and Pclass likely have the strongest influence on survival, aligning with historical Titanic insights where women and higher-class passengers had higher survival rates.
             </div>
           </div>
         </div>
@@ -189,44 +182,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-2.png') }}"
+            data-lightbox="titanic-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-              alt="All Features Plot"
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-2.png') }}"
+              alt="Relationships Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">2. All Features Plot</h2>
+          <h2 class="section-title">2.  Feature Relationships Biplot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The major area of the plot is green, with some orange and minimal
-              red areas.
+              This is a 3D biplot with axes Radial X (horizontal, -1 to 1), Radial Y (depth, -1 to 1), and Radial Z (vertical, -1 to 1). Green vectors represent Pclass, Sex_female, and Survived, while red vectors include Age, SibSp, Parch, and Fare. Green vectors point strongly positive on Radial X (~0.7 for Survived, ~0.6 for Sex_female, ~0.5 for Pclass), while red vectors point moderately positive on Radial Y (Fare ~0.5, Age ~0.4, SibSp and Parch ~0.3). The viewing angle tilts slightly, showing separation between green and red vectors.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dominance across dimensions (Preparation_Time_min,
-              Courier_Experience_yrs, Distance_km, and Weather conditions)
-              indicates that the average delivery time is low, regardless of the
-              feature combination. The orange areas (medium delivery time) are
-              decently represented, showing some variability, while the red
-              areas (late deliveries) are sparse, suggesting late deliveries are
-              uncommon.
+              The tilted viewing angle enhances the separation between green and red vectors, making their distinct contributions clear. Radial X is the primary axis of separation, with green vectors (Pclass, Sex_female, Survived) clustering together, indicating a strong positive correlation among them. Radial Y captures the red vectors, with Fare and Age showing moderate positive contributions, followed by SibSp and Parch. Radial Z shows minimal spread, suggesting less variance along this axis. Comparing attributes, Survived aligns closely with Sex_female and Pclass, while Age, SibSp, Parch, and Fare form a separate group, indicating different influences on survival. The axis plotting emphasizes Radial X as the key dimension for survival-related attributes.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              This plot highlights that, overall, the delivery system performs
-              well, with most deliveries being timely. The low incidence of red
-              (late deliveries) suggests that factors like distance, preparation
-              time, or courier experience generally don't lead to significant
-              delays, even when weather varies.
+              The strong alignment of Survived with Sex_female and Pclass on Radial X confirms that gender and passenger class are critical survival predictors, with females and higher-class passengers more likely to survive. The red vectors (Age, SibSp, Parch, Fare) on Radial Y suggest these attributes influence survival differently, possibly indicating that younger passengers, those with family, or those who paid higher fares had varying survival chances. The viewing angle highlights these two distinct groups, providing insight into the Titanic’s survival dynamics.
             </div>
           </div>
         </div>
@@ -236,41 +218,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-3.png') }}"
+            data-lightbox="titanic-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
-              alt="Foggy and Rainy Features Plot"
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-3.png') }}"
+              alt="Parallel coordinates Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">3. Foggy and Rainy Features Plot</h2>
+          <h2 class="section-title">3. Survival Parallel Coordinates Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              There are very few instances of late deliveries in foggy and rainy
-              conditions.
+              This is a 3D parallel coordinates plot with axes for OUTPUT(SURVIVED), Sex_female, Fare, Pclass, Age, SibSp, and Parch. Each axis is normalized (0 to 1). Red lines represent non-survivors (Survived = 0), and green lines represent survivors (Survived = 1). The viewing angle is tilted to reduce line overlap, showing clear clustering: green lines cluster at high Sex_female (0.8–1.0) and low Pclass (0–0.3, meaning higher class), while red lines dominate at low Sex_female (0–0.2) and high Pclass (0.7–1.0, meaning lower class).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows limited red points along the "Weather_Rainy" and
-              "Weather_Foggy" axes, with more concentration in the green and
-              orange regions. This indicates that even in adverse weather
-              conditions, deliveries are mostly on time or only moderately
-              delayed.
+              The 3D viewing angle minimizes overlap, making patterns across axes more visible. The axes are plotted in parallel, with each representing a feature: Survived (leftmost), followed by Sex_female, Fare, Pclass, Age, SibSp, and Parch. Comparing attributes, Sex_female and Pclass show the strongest separation between survivors and non-survivors, with green lines (survivors) concentrated at high Sex_female and low Pclass values. Fare shows some separation, with green lines often at higher values (0.6–1.0). Age, SibSp, and Parch exhibit more overlap, with less distinct clustering, though green lines slightly favor lower Age (0.2–0.5) and moderate SibSp and Parch (0.3–0.6). The axis order emphasizes survival predictors early (Sex_female, Pclass), highlighting their importance.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Contrary to what might be expected, foggy and rainy weather
-              doesn't significantly impact delivery times in this dataset. This
-              could be due to experienced couriers, efficient preparation, or
-              shorter distances mitigating the effects of poor weather.
+              The plot confirms that Sex_female and Pclass are the most significant survival predictors, with females and higher-class passengers (low Pclass values) far more likely to survive, as shown by the green line clusters. Fare also plays a role, with higher fares linked to survival, possibly due to its correlation with Pclass. Age, SibSp, and Parch have less pronounced effects, but younger passengers and those with moderate family sizes may have slight survival advantages. The viewing angle and parallel axis plotting effectively reveal these hierarchical influences on Titanic survival.
             </div>
           </div>
         </div>
@@ -280,46 +254,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-4.png') }}"
+            data-lightbox="titanic-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
-              alt="Distance Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-4.png') }}"
+              alt="feature loading Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">4. Distance_km Dimension Plot</h2>
+          <h2 class="section-title">4. Feature Loadings Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The Distance_km axis predominantly shows green dots, with some
-              orange and a few red dots scattered along the axis.
+              This is a 3D plot with axes Radial X (horizontal, -1 to 1), Radial Y (depth, -1 to 1), and Output Z (Survived, vertical, 0 to 1). Green vectors include Pclass, Age, SibSp, and Parch, while red vectors are Fare and Sex_female. Loadings show Sex_female (strong positive on Output Z, ~0.8), Fare (moderate positive on Output Z, ~0.5), Pclass (negative on Output Z, ~ -0.6), Age (small negative on Output Z, ~ -0.3), and SibSp and Parch (small positive on Output Z, ~0.2). The viewing angle tilts to emphasize vector directions.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dots indicate that for most distances, the delivery time
-              is low, meaning deliveries are generally on time regardless of the
-              distance traveled. The orange dots represent medium delivery
-              times, suggesting that as distance increases, there are some cases
-              where delivery takes a bit longer but still remains within a
-              reasonable range. The sparse red dots show that late deliveries
-              are rare, even for longer distances.
+              The tilted viewing angle highlights the relationship between attributes and Survived (Output Z). The axes are plotted with Output Z as the primary focus, showing direct survival contributions. Radial X and Y capture secondary relationships. Comparing attributes, Sex_female and Fare (red vectors) point strongly positive on Output Z, indicating a direct positive impact on survival. Pclass points negatively on Output Z, reflecting that higher Pclass values (lower class) reduce survival chances. Age also has a negative impact, while SibSp and Parch show small positive contributions. SibSp and Parch cluster together on Radial Y, suggesting correlation, while Sex_female and Fare are more spread on Radial X, indicating distinct influences.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Distance doesn't seem to be a major factor in causing delivery
-              delays in this dataset. This could imply that the logistics system
-              is well-optimized for handling varying distances, possibly due to
-              efficient routing, reliable transportation, or experienced
-              couriers who manage longer trips effectively. It's a positive sign
-              for delivering essential goods, as timely delivery is maintained
-              across distances.
+              Sex_female is the strongest positive predictor of survival, followed by Fare, which aligns with historical data showing women and wealthier passengers had higher survival rates. Pclass’s negative loading confirms lower-class passengers faced worse outcomes. Age’s negative impact suggests older passengers were less likely to survive, while SibSp and Parch’s small positive contributions may reflect family dynamics aiding survival. The viewing angle and axis plotting along Output Z directly link attributes to survival, clarifying their relative importance.
             </div>
           </div>
         </div>
@@ -329,83 +290,77 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-5.png') }}"
+            data-lightbox="titanic-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
-              alt="Courier Experience Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-5.png') }}"
+              alt="Feature Parallel Coordinates Plot "
             />
           </a>
         </div>
         <div class="content-container">
           <h2 class="section-title">
-            5. Courier_Experience_yrs Dimension Plot
+            5. Feature Parallel Coordinates Plot 
           </h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The Courier_Experience_yrs axis is also dominated by green dots,
-              with a moderate amount of orange dots and very few red dots.
+              This is a 3D parallel coordinates plot with axes Pclass, Age, SibSp, Parch, Fare, Sex_female, and Survived, each normalized (0 to 1). Red lines (non-survivors) and green lines (survivors) show distinct patterns: green lines cluster at low Pclass (0–0.3), high Sex_female (0.8–1.0), and high Survived (1.0), while red lines dominate at high Pclass (0.7–1.0), low Sex_female (0–0.2), and low Survived (0.0). The viewing angle is tilted to reduce overlap.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The prevalence of green dots along this axis suggests that
-              couriers, regardless of their years of experience, are mostly able
-              to deliver on time. The orange dots indicate that in some cases,
-              delivery times are medium, which might occur with less experienced
-              couriers or in combination with other factors like weather or
-              distance. The minimal red dots show that late deliveries are
-              uncommon across all levels of courier experience.
+              The 3D viewing angle minimizes line overlap, enhancing visibility of trends across axes. The axes are plotted in parallel, with Pclass on the left, progressing to Survived on the right. Comparing attributes, Sex_female and Survived show the strongest separation, with green lines heavily concentrated at high Sex_female and Survived values. Pclass also shows clear separation, with green lines at lower values (higher class). Fare shows some clustering, with green lines favoring higher values (0.6–1.0). Age, SibSp, and Parch have more overlap, though green lines slightly favor lower Age (0.2–0.5) and moderate SibSp and Parch (0.3–0.6). The axis order places key predictors like Pclass and Sex_female strategically, emphasizing their roles.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Courier experience doesn't significantly impact delivery times in
-              this dataset, as both new and experienced couriers achieve timely
-              deliveries. This could suggest that the training or operational
-              systems in place are effective, enabling even less experienced
-              couriers to perform well. It also highlights the robustness of the
-              delivery process, ensuring essential goods are delivered promptly
-              regardless of who is handling the delivery.
+              This plot reinforces that Sex_female and Pclass are dominant survival predictors, with females and higher-class passengers having significantly higher survival rates, as shown by green line clusters. Fare’s association with survival further supports the role of wealth. Age, SibSp, and Parch play secondary roles, with younger passengers and those with moderate family sizes showing slight survival advantages. The viewing angle and parallel axis plotting effectively highlight these patterns, providing a clear visual of survival factors.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Section 6: Courier Experience Plot -->
+      <div class="analysis-section">
+        <div class="gif-container">
+          <a
+            href="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-6.png') }}"
+            data-lightbox="titanic-plot"
+          >
+            <img
+              src="{{ url_for('static', filename='plots/GIFS/3rd_Dataset/titanic-6.png') }}"
+              alt="Feature Spider Plott "
+            />
+          </a>
+        </div>
+        <div class="content-container">
+          <h2 class="section-title">
+            6. Feature Spider Plot 
+          </h2>
+          <div class="insight-item">
+            <div class="insight-label">Observation:</div>
+            <div class="insight-text">
+              This is a 3D spider (radar) plot with axes for Age, SibSp, Parch, Fare, Sex_female, and Pclass, each normalized (0 to 1). Red lines (non-survivors) and green lines (survivors) show distinct patterns: green lines form a larger shape, peaking at Sex_female (0.9–1.0) and low Pclass (0–0.3), while red lines peak at high Pclass (0.7–1.0) and low Sex_female (0–0.2). The viewing angle provides a circular perspective with slight 3D tilt.
+            </div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Analysis:</div>
+            <div class="insight-text">
+              The 3D viewing angle offers a circular view, reducing overlap and enhancing comparison across attributes. The axes radiate from the center, with each attribute evenly spaced: Age at 0°, SibSp at 60°, Parch at 120°, Fare at 180°, Sex_female at 240°, and Pclass at 300°. Comparing attributes, Sex_female and Pclass show the largest differences between red and green lines, with green lines (survivors) peaking at high Sex_female and low Pclass. Fare also shows a difference, with green lines higher (0.6–1.0) than red (0.3–0.5). Age, SibSp, and Parch have smaller differences, with green lines slightly favoring lower Age (0.2–0.5) and moderate SibSp and Parch (0.3–0.6). The radial axis plotting emphasizes Sex_female and Pclass as key differentiators.
+          </div>
+          <div class="insight-item">
+            <div class="insight-label">Interpretation:</div>
+            <div class="insight-text">
+              The spider plot confirms that Sex_female and Pclass are the primary survival predictors, with survivors (green lines) being predominantly female and from higher classes. Fare’s higher values among survivors further support the role of wealth in survival outcomes. Age, SibSp, and Parch play secondary roles, with slight trends toward younger passengers and moderate family sizes among survivors. The viewing angle and radial axis plotting provide a clear visual of how these attributes collectively shape survival patterns in the Titanic dataset.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- General Insights -->
-      <div class="general-insights">
-        <h2>General Insights from the Multivariate Radial Plots</h2>
-        <div class="insight-item">
-          <div class="insight-label">Delivery Time Trends:</div>
-          <div class="insight-text">
-            Across all plots, green (low delivery time) dominates, suggesting
-            the delivery system is efficient overall. Late deliveries (red) are
-            consistently rare, even under varying conditions.
-          </div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-label">Weather Impact:</div>
-          <div class="insight-text">
-            While clear weather results in the fastest deliveries, foggy and
-            rainy conditions don't lead to as many delays as might be expected,
-            indicating resilience in the delivery process.
-          </div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-label">Feature Interactions:</div>
-          <div class="insight-text">
-            The "All Features" plot shows that no single factor (like distance
-            or preparation time) overwhelmingly causes delays, as the green area
-            spans across dimensions. Courier experience might play a role in
-            maintaining efficiency, especially in adverse weather.
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-</html>
+      
+
+      
