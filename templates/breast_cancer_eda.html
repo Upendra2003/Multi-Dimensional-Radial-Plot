@@ -146,40 +146,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-            data-lightbox="weather-plot"
+            href="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-1.png') }}"
+            data-lightbox="cancer-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
-              alt="Weather Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-1.png') }}"
+              alt="cancer Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">1. Tumor Size vs. Age</h2>
+          <h2 class="section-title">1. Attribute Loadings Radar Chart</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              When the weather is clear, delivery times are generally low to
-              mid-range.
+              This is a radar chart with six axes radiating from a central point, each representing an attribute: radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean, and compactness_mean. The axes are scaled from -1 to 1, with the center at 0. The attributes are positioned at specific angles: area_mean at 0°, texture_mean at 45°, perimeter_mean at 60°, smoothness_mean at 315°, compactness_mean at 225°, and radius_mean at 180°. The loadings are: texture_mean (0.75), perimeter_mean (0.5), area_mean (0.5), smoothness_mean (0.5), compactness_mean (0.5), and radius_mean (0.25).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows a concentration of data points in the green and
-              orange regions along the "Weather_Clear" axis, indicating that
-              deliveries are mostly on time or slightly delayed. The presence of
-              a few red points suggests there are rare cases of late deliveries,
-              but these are exceptions rather than the norm.
+              The viewing angle is fixed and symmetrical, offering an equal perspective on all attributes. Along the horizontal axis (Radial X), area_mean (0.5) and radius_mean (0.25) are prominent, with area_mean appearing stronger due to its higher loading. On the diagonal axis (Radial Y), texture_mean (0.75) and perimeter_mean (0.5) stand out, with texture_mean being the most dominant. The vertical axis (Radial Z) emphasizes perimeter_mean (0.5) and compactness_mean (0.5), showing moderate contributions. The choice of axis angles spreads the attributes evenly, but the varying loadings highlight differences in their influence.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Clear weather seems to facilitate faster deliveries, likely due to
-              better visibility and road conditions, with only occasional delays
-              possibly due to other factors like distance or courier experience.
+              Texture_mean emerges as the most significant attribute, particularly along the Radial Y perspective, suggesting it has a strong influence in this dataset. Radius_mean, with the lowest loading (0.25), is less prominent across all views, indicating a weaker contribution. The attributes perimeter_mean, area_mean, smoothness_mean, and compactness_mean have balanced loadings (0.5), but their visibility shifts slightly depending on the viewing angle, implying they play consistent yet context-dependent roles.
             </div>
           </div>
         </div>
@@ -189,44 +182,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-2.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/WeatherPlot.gif') }}"
+              src="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-2.png') }}"
               alt="All Features Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">2. All Features Plot</h2>
+          <h2 class="section-title">2. Relationships Scatter Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The major area of the plot is green, with some orange and minimal
-              red areas.
+              This is a 3D scatter plot with axes labeled Radial X (horizontal), Radial Y (depth), and Radial Z (vertical). The viewing angle positions Radial X left-to-right, Radial Y front-to-back, and Radial Z bottom-to-top. Red vectors represent texture_mean, radius_mean, and perimeter_mean, while green vectors represent area_mean, smoothness_mean, and compactness_mean. Loadings include: texture_mean (strong positive Radial Z, moderate positive Radial X), radius_mean (small negative Radial Z, moderate negative Radial X), perimeter_mean (strong negative Radial Z, moderate negative Radial X), area_mean (small positive Radial Z, significant positive Radial Y), smoothness_mean (small negative Radial Z, significant negative Radial Y), and compactness_mean (small negative Radial Z, moderate negative Radial Y).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dominance across dimensions (Preparation_Time_min,
-              Courier_Experience_yrs, Distance_km, and Weather conditions)
-              indicates that the average delivery time is low, regardless of the
-              feature combination. The orange areas (medium delivery time) are
-              decently represented, showing some variability, while the red
-              areas (late deliveries) are sparse, suggesting late deliveries are
-              uncommon.
+              The viewing angle accentuates the separation between red and green vectors. In the Radial X vs. Radial Z plane, texture_mean points upward while perimeter_mean and radius_mean point downward, indicating an inverse relationship along Radial Z. In the Radial Y vs. Radial Z plane, area_mean extends upward while smoothness_mean and compactness_mean point downward, showing an inverse trend along Radial Y. The Radial X vs. Radial Y view separates red vectors (spread along Radial X) from green vectors (spread along Radial Y), suggesting distinct contributions based on axis choice.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              This plot highlights that, overall, the delivery system performs
-              well, with most deliveries being timely. The low incidence of red
-              (late deliveries) suggests that factors like distance, preparation
-              time, or courier experience generally don't lead to significant
-              delays, even when weather varies.
+              The red group (texture_mean, perimeter_mean, radius_mean) shows texture_mean opposing the other two along Radial Z, hinting it may reflect a unique factor. The green group (area_mean, smoothness_mean, compactness_mean) reveals area_mean contrasting with smoothness_mean and compactness_mean along Radial Y, indicating differing impacts. The viewing angle clarifies these groupings, suggesting the attributes cluster into two sets with distinct influences on the data.
             </div>
           </div>
         </div>
@@ -236,41 +218,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-3.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/ClearFoggyPlot.gif') }}"
-              alt="Foggy and Rainy Features Plot"
+              src="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-3.png') }}"
+              alt="Attribute Comparison Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">3. Foggy and Rainy Features Plot</h2>
+          <h2 class="section-title">3. Attribute Comparison Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              There are very few instances of late deliveries in foggy and rainy
-              conditions.
+              This is a 3D plot with axes: RADIAX (X, horizontal), Y (depth), and RADIAZ (Z, vertical). The viewing angle tilts X to the left, Y to the right, and Z upward. Red vectors include perimeter_mean and area_mean, while green vectors include texture_mean, radius_mean, compactness_mean, and smoothness_mean. Loadings are: perimeter_mean (~0.5, 0.5, 0.5), area_mean (~0.5, 0.5, 0), texture_mean (~0.2, 0, -0.5), radius_mean (~0.3, 0, -0.5), compactness_mean (~-0.2, 0, -0.5), and smoothness_mean (~-0.3, 0, -0.5).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The plot shows limited red points along the "Weather_Rainy" and
-              "Weather_Foggy" axes, with more concentration in the green and
-              orange regions. This indicates that even in adverse weather
-              conditions, deliveries are mostly on time or only moderately
-              delayed.
+              The viewing angle separates red vectors (positive across X, Y, Z) from green vectors (negative along Z). In the RADIAX vs. RADIAZ view, red vectors point upward-right, while green vectors point downward, highlighting an inverse relationship. The green vectors cluster closely, suggesting similar contributions, whereas the red vectors are more dispersed, indicating varied influence across axes. The axis plotting emphasizes this contrast, with RADIAZ being a key differentiator.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Contrary to what might be expected, foggy and rainy weather
-              doesn't significantly impact delivery times in this dataset. This
-              could be due to experienced couriers, efficient preparation, or
-              shorter distances mitigating the effects of poor weather.
+              The red vectors (perimeter_mean, area_mean) are correlated and contribute positively across multiple dimensions, suggesting they share a common underlying factor. The green vectors (texture_mean, radius_mean, compactness_mean, smoothness_mean) are also correlated but oppose the red group along RADIAZ, indicating they capture a different data aspect. The viewing angle underscores this opposition, revealing two distinct attribute groups.
             </div>
           </div>
         </div>
@@ -280,46 +254,33 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-4.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/DistancePlot.gif') }}"
-              alt="Distance Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-4.png') }}"
+              alt="Attribute Separation Scatter Plot"
             />
           </a>
         </div>
         <div class="content-container">
-          <h2 class="section-title">4. Distance_km Dimension Plot</h2>
+          <h2 class="section-title">4. Attribute Separation Scatter Plot</h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The Distance_km axis predominantly shows green dots, with some
-              orange and a few red dots scattered along the axis.
+              This is a 3D scatter plot with axes: Radial X (horizontal), Radial Y (depth), and Radial Z (vertical). The viewing angle is slightly tilted for a 3D perspective. Red vectors include perimeter_mean, texture_mean, area_mean, and radius_mean, while green vectors include compactness_mean and smoothness_mean. Loadings are: perimeter_mean (positive Radial Z, small positive Radial X), texture_mean (positive Radial Z, positive Radial Y), area_mean (negative Radial Z, small negative Radial X), radius_mean (negative Radial Z, negative Radial X and Y), compactness_mean (negative Radial Z, small positive Radial X), and smoothness_mean (negative Radial Z, positive Radial X).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The green dots indicate that for most distances, the delivery time
-              is low, meaning deliveries are generally on time regardless of the
-              distance traveled. The orange dots represent medium delivery
-              times, suggesting that as distance increases, there are some cases
-              where delivery takes a bit longer but still remains within a
-              reasonable range. The sparse red dots show that late deliveries
-              are rare, even for longer distances.
+              The viewing angle divides attributes along Radial Z: perimeter_mean and texture_mean are positive, while others are negative. In the Radial X vs. Radial Z view, perimeter_mean and texture_mean point upward, contrasting with downward area_mean and radius_mean. The green vectors (compactness_mean, smoothness_mean) are both negative along Radial Z but diverge along Radial X, showing nuanced differences. The axis plotting along Radial Z drives the primary separation.
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Distance doesn't seem to be a major factor in causing delivery
-              delays in this dataset. This could imply that the logistics system
-              is well-optimized for handling varying distances, possibly due to
-              efficient routing, reliable transportation, or experienced
-              couriers who manage longer trips effectively. It's a positive sign
-              for delivering essential goods, as timely delivery is maintained
-              across distances.
+              Perimeter_mean and texture_mean are positively correlated and contribute similarly along Radial Z, suggesting a shared influence. Area_mean and radius_mean oppose them, indicating they may represent inverse characteristics. The green vectors (compactness_mean, smoothness_mean) align negatively along Radial Z but differ along Radial X, hinting at subtle distinctions. The viewing angle highlights Radial Z as key for distinguishing attribute groups.
             </div>
           </div>
         </div>
@@ -329,83 +290,37 @@
       <div class="analysis-section">
         <div class="gif-container">
           <a
-            href="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
+            href="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-5.png') }}"
             data-lightbox="weather-plot"
           >
             <img
-              src="{{ url_for('static', filename='plots/GIFS/4th_Dataset/PrepExp.gif') }}"
-              alt="Courier Experience Dimension Plot"
+              src="{{ url_for('static', filename='plots/GIFS/2ed_Dataset/cancer-5.png') }}"
+              alt="Diagnosis Correlation Plot"
             />
           </a>
         </div>
         <div class="content-container">
           <h2 class="section-title">
-            5. Courier_Experience_yrs Dimension Plot
+            5. Diagnosis Correlation Plot
           </h2>
           <div class="insight-item">
             <div class="insight-label">Observation:</div>
             <div class="insight-text">
-              The Courier_Experience_yrs axis is also dominated by green dots,
-              with a moderate amount of orange dots and very few red dots.
+              This is a 3D plot with axes: Radial Z (right vertical), Output (Diagnosis) (left vertical), and an unnamed axis (horizontal). The viewing angle is tilted for clarity. Red vectors include texture_mean, perimeter_mean, area_mean, and smoothness_mean, while green vectors include radius_mean and compactness_mean. Loadings are: texture_mean (strong positive Radial Z, moderate positive Output), perimeter_mean (strong positive Radial Z, moderate positive Output), area_mean (strong positive Radial Z, moderate positive Output), smoothness_mean (moderate negative Output), radius_mean (strong negative Output), and compactness_mean (strong negative Output).
             </div>
           </div>
           <div class="insight-item">
             <div class="insight-label">Analysis:</div>
             <div class="insight-text">
-              The prevalence of green dots along this axis suggests that
-              couriers, regardless of their years of experience, are mostly able
-              to deliver on time. The orange dots indicate that in some cases,
-              delivery times are medium, which might occur with less experienced
-              couriers or in combination with other factors like weather or
-              distance. The minimal red dots show that late deliveries are
-              uncommon across all levels of courier experience.
-            </div>
+             The viewing angle emphasizes the relationship between Radial Z and Output (Diagnosis). Red vectors with positive Radial Z and Output (texture_mean, perimeter_mean, area_mean) contrast with vectors having negative Output (radius_mean, compactness_mean). Smoothness_mean is an outlier in the red group, with negative Output despite positive Radial Z. The axis plotting links Radial Z to diagnostic outcomes, highlighting attribute impacts.
           </div>
           <div class="insight-item">
             <div class="insight-label">Interpretation:</div>
             <div class="insight-text">
-              Courier experience doesn't significantly impact delivery times in
-              this dataset, as both new and experienced couriers achieve timely
-              deliveries. This could suggest that the training or operational
-              systems in place are effective, enabling even less experienced
-              couriers to perform well. It also highlights the robustness of the
-              delivery process, ensuring essential goods are delivered promptly
-              regardless of who is handling the delivery.
+              Texture_mean, perimeter_mean, and area_mean are strongly tied to a positive diagnosis, while radius_mean and compactness_mean align with a negative diagnosis. Smoothness_mean deviates within the red group, suggesting a unique diagnostic role. The viewing angle clarifies these relationships, identifying key predictors of the Output (Diagnosis).
             </div>
           </div>
         </div>
       </div>
 
-      <!-- General Insights -->
-      <div class="general-insights">
-        <h2>General Insights from the Multivariate Radial Plots</h2>
-        <div class="insight-item">
-          <div class="insight-label">Delivery Time Trends:</div>
-          <div class="insight-text">
-            Across all plots, green (low delivery time) dominates, suggesting
-            the delivery system is efficient overall. Late deliveries (red) are
-            consistently rare, even under varying conditions.
-          </div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-label">Weather Impact:</div>
-          <div class="insight-text">
-            While clear weather results in the fastest deliveries, foggy and
-            rainy conditions don't lead to as many delays as might be expected,
-            indicating resilience in the delivery process.
-          </div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-label">Feature Interactions:</div>
-          <div class="insight-text">
-            The "All Features" plot shows that no single factor (like distance
-            or preparation time) overwhelmingly causes delays, as the green area
-            spans across dimensions. Courier experience might play a role in
-            maintaining efficiency, especially in adverse weather.
-          </div>
-        </div>
-      </div>
-    </div>
-  </body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-</html>
+     
